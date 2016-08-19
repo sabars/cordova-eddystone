@@ -1921,7 +1921,7 @@ var isScanning = false;
  *       console.log('Scan error: ' + error);
  *     });
  */
-evothings.eddystone.startScan = function(scanCallback, failCallback)
+evothings.eddystone.startScan = function(scanCallback, failCallback, UUIDs)
 {
 	// Internal callback variable names.
 	var win = scanCallback;
@@ -1942,7 +1942,7 @@ evothings.eddystone.startScan = function(scanCallback, failCallback)
 	evothings.easyble.startScan(
 		// Scan for Eddystone Service UUID.
 		// This enables background scanning on iOS (and Android).
-		['0000FEAA-0000-1000-8000-00805F9B34FB'],
+		UUIDs ? UUIDs : [],
 		function(device)
 		{
 			// A device might be an Eddystone if it has advertisementData...
