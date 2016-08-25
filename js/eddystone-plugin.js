@@ -530,6 +530,48 @@ evothings.util = {};
 			internal.connectedDevices[key] = null;
 		}
 	};
+	
+	internal.getIBeaconUUID = function(device)
+	{
+			// Convert 16-byte Uint8Array to RFC-4122-formatted UUID.
+			function arrayToUUID(array, offset)
+			{
+				var k=0;
+				var string = '';
+				var UUID_format = [4, 2, 2, 2, 6];
+				for (var l=0; l<UUID_format.length; l++)
+				{
+					if (l != 0)
+					{
+						string += '-';
+					}
+					for (var j=0; j<UUID_format[l]; j++, k++)
+					{
+						string += evothings.util.toHexString(array[offset+k], 1);
+					}
+				}
+				return string;
+			}	
+	
+	
+		var byteArray = evothings.util.base64DecToArr(device.scanRecord);
+		var uuid = false;
+		for(var i = 0; i + 3 < byteArray.length; i++)
+		{
+			if(byteArray[i] == 0x4c && 
+				byteArray[i + 1] == 0x00 && 
+				byteArray[i + 2] == 0x02 && 
+				byteArray[i + 3] == 0x15)
+			{
+				uuid = arrayToUUID(byteArray, i + 4);
+				
+				return uuid;
+			}
+		}
+		
+		return false;
+		
+	}
 
 	/**
 	 * If device already has advertisementData, does nothing.
@@ -556,6 +598,13 @@ evothings.util = {};
 		var advertisementData = {};
 		var serviceUUIDs;
 		var serviceData;
+		
+		var ibeaconUUID = internal.getIBeaconUUID();
+		if(ibeaconUUID)
+		{
+			device.ibeacon = ibeaconUUID;
+			return;
+		}
 
 		// The scan record is a list of structures.
 		// Each structure has a length byte, a type byte, and (length-1) data bytes.
@@ -1950,7 +1999,7 @@ evothings.eddystone.startScan = function(scanCallback, failCallback)
 			if(!sd) return;
 			// And the 0xFEAA service.
 			var base64data = sd['0000feaa'+BLUETOOTH_BASE_UUID];
-			if(!base64data) return;
+			if(!base64data) return win(device);
 			var byteArray = evothings.util.base64DecToArr(base64data);
 
 			// If the data matches one of the Eddystone frame formats,
@@ -1958,6 +2007,8 @@ evothings.eddystone.startScan = function(scanCallback, failCallback)
 			if(parseFrameUID(device, byteArray, win, fail)) return;
 			if(parseFrameURL(device, byteArray, win, fail)) return;
 			if(parseFrameTLM(device, byteArray, win, fail)) return;
+			
+			win(device);
 		},
 		function(error)
 		{
