@@ -1993,10 +1993,10 @@ evothings.eddystone.startScan = function(scanCallback, failCallback)
 		{
 			// A device might be an Eddystone if it has advertisementData...
 			var ad = device.advertisementData;
-			if(!ad) return;
+			if(!ad) return win(device);
 			// With serviceData...
 			var sd = ad.kCBAdvDataServiceData;
-			if(!sd) return;
+			if(!sd) return win(device);
 			// And the 0xFEAA service.
 			var base64data = sd['0000feaa'+BLUETOOTH_BASE_UUID];
 			if(!base64data) return win(device);
