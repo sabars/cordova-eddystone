@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/garakh/cordova-eddystone.git"
+    "url": "git+https://github.com/sabars/cordova-eddystone.git"
   },
   "keywords": [
     "Eddystone",
