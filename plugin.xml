@@ -13,5 +13,5 @@
 		<clobbers target="evothings.eddystone" />
 	</js-module>
 
-	<dependency id="cordova-plugin-ble" />
+	<dependency id="https://github.com/sabars/cordova-ble" />
 </plugin>
