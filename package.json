@@ -18,7 +18,7 @@
   "author": "Evothings (forked by I. Garakh)",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/evothings/cordova-eddystone/issues"
+    "url": "https://github.com/sabars/cordova-eddystone/issues"
   },
-  "homepage": "https://github.com/evothings/cordova-eddystone#readme"
+  "homepage": "https://github.com/sabars/cordova-eddystone#readme"
 }
